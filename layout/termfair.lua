@@ -116,9 +116,9 @@ local function do_fair(p, orientation)
         -- with nmaster=3 and ncol=1 you'll have
         --        (1)                (2)                (3)
         --   +---+---+---+      +-+---+---+-+      +---+---+---+
-        --   |   |   |   |      | |   |   | |      |   |   |   |
-        --   |   | 1 |   |  ->  | | 1 | 2 | | ->   | 1 | 2 | 3 |  ->
-        --   |   |   |   |      | |   |   | |      |   |   |   |
+        --   |           |      |     |     |      |   |   |   |
+        --   |     1     |  ->  |  1  |  2  | ->   | 1 | 2 | 3 |  ->
+        --   |           |      |     |     |      |   |   |   |
         --   +---+---+---+      +-+---+---+-+      +---+---+---+
 
         --        (4)                (5)
@@ -136,6 +136,11 @@ local function do_fair(p, orientation)
         if ncol  <= 1 then ncol  = 1 end
 
         local width = math.floor(wa.width / num_x)
+
+	-- If there are too few columns to fill the screen, stretch them until they fill	
+	if #cls < num_x then
+		width = math.floor(wa.width / #cls)
+	end
 
         if #cls < num_x then
             -- Less clients than the number of columns, let's center it!
